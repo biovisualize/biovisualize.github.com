@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type='text/javascript' src='http://mbostock.github.com/d3/d3.js'></script>
+</head>
+<body>
+<div class='viz'></div>
+<script type='text/javascript'>
+
+    var tilesData = [
+        [6, 3, 0, 1, 0, 4, 5],
+        [5, 3, 2, 1, 0, 4, 5],
+        [5, 3, 0, 1, 0, 4, 5],
+        [5, 3, 0, 1, 2, 4, 7],
+        [5, 3, 0, 1, 0, 4, 5],
+        [5, 3, 2, 1, 0, 4, 5],
+        [7, 3, 2, 1, 0, 4, 5],
+        [5, 3, 2, 1, 0, 4, 5],
+        [5, 3, 0, 1, 0, 4, 5],
+        [5, 3, 0, 1, 2, 4, 5],
+        [5, 3, 0, 1, 2, 4, 5]
+    ];
+
+    var tileContent = ['base.png', 'road_lines.png', 'car1.png',
+        'sidewalk_left.png', 'sidewalk_right.png',
+        'grass.png', 'grass2.png', 'grass3.png'];
+    var speed = 200;
+    var tileW = 50;
+    var tileH = 50;
+    var w = tileW * tilesData[0].length;
+    var h = tileH * tilesData.length - 1;
+
+
+    var view = d3.select('.viz')
+        .append('svg')
+        .attr('width', w)
+        .attr('height', h - tileH);
+
+    var terrainGroup = view.append('g')
+        .attr('class', 'terrain');
+
+    var truckGroup = view.append('g')
+        .attr('class', 'truck')
+            .attr('transform', 'translate(0,0)');
+
+    // Draw truck
+    // ********************************************
+    var truckW = tileW;
+    var truckH = tileH;
+    var truck = truckGroup.append('image')
+            .attr('class', 'truck')
+            .attr('xlink:href', function(d, i){return './img/truck.png';})
+            .attr('y', h  - tileH - truckH - 10)
+            .attr('width', truckW)
+            .attr('height', truckH);
+    var truckHit = truckGroup.append('image')
+            .attr('class', 'truck-hit')
+            .attr('xlink:href', function(d, i){return './img/truck-hit.png';})
+            .attr('y', h  - tileH - truckH - 10)
+            .attr('width', truckW)
+            .attr('height', truckH)
+            .attr('opacity', 0);
+    var truckSide = 'middle';
+
+    function moveTruck(side){
+        truckSide = side;
+        truckGroup.transition()
+            .duration(speed*2)
+            .ease('cubic-out')
+            .attr('transform', function(d, i){
+                var negPosSide = (side == 'left')? -1 : 1;
+                var posX = w / 2 - truckW / 2 + tileW * negPosSide;
+                return 'translate('+posX+',0)';
+            });
+    }
+
+    function hitTruck(){
+        truckHit.transition()
+            .duration(speed/2)
+            .ease('cubic-out')
+            .attr('opacity', 0.5)
+            .each('end', function(d, i){
+                d3.select(this)
+                    .transition()
+                    .duration(speed/2)
+                    .ease('cubic-out')
+                    .attr('opacity', 0);
+            });
+    }
+
+    // Draw tiles
+    // ********************************************
+    function redrawTerrain() {
+        var tiles = terrainGroup.selectAll('g.tiles')
+            .data(tilesData);
+        tiles.enter().append('g')
+            .attr('class', 'tiles');
+        tiles.each(function(pD, pI){
+            var tile = d3.select(this).selectAll('image.tile')
+                .data(function(d, i){return d;});
+            tile.enter().append('image')
+                .attr('class', 'tile')
+                .attr('width', tileW)
+                .attr('height', tileH)
+            tile.attr('x', function(d, i){return i * tileW;})
+                .attr('y', function(d, i){return (pI - 1) * tileH;})
+                .attr('xlink:href', function(d, i){return './img/'+tileContent[d];})
+                .transition()
+                .duration(speed)
+                .ease('linear')
+                .attr('y', function(d, i){return pI * tileH;});
+            tile.exit().remove();
+            });
+        tiles.exit().remove();
+
+        if(truckSide == 'left' && tilesData[tilesData.length-1][2] > 0) hitTruck();
+        if(truckSide == 'right' && tilesData[tilesData.length-1][4] > 0) hitTruck();
+    }
+
+    setInterval(function() {
+        var last = tilesData.splice(-1, 1);
+        tilesData.splice(0, 0, last[0]);
+        redrawTerrain();
+    }, speed);
+
+    // Keyboard
+    // ********************************************
+
+    d3.select('body')
+        .on('keydown', keydown);
+
+    function keydown(){
+        var key = event.keyCode;
+        var left = 37;
+        var right = 39;
+
+        if(key == left){
+            moveTruck('left');
+        }else if(key == right){
+            moveTruck('right');
+        }
+    };
+
+</script>
+</body>
+</html>
