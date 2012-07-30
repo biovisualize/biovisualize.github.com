@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>Using CodeMirror with Gist and Markdown</title>
+    <meta charset=utf-8>
+    <script src=./libs/d3/d3.v2.min.js></script>
+    <script src=./libs/Markdown.Converter.js></script>
+    <script src=./libs/codemirror/codemirror.js></script>
+    <script src=./libs/codemirror/mode/xml/xml.js></script>
+    <script src=./libs/codemirror/mode/javascript/javascript.js></script>
+    <script src=./libs/codemirror/mode/css/css.js></script>
+    <script src=./libs/codemirror/mode/htmlmixed/htmlmixed.js></script>
+    <link rel=stylesheet href=./libs/codemirror/codemirror.css>
+    <link rel=stylesheet href=./doc.css>
+</head>
+<body>
+
+<div class="doc">
+
+An h1 header
+============
+
+An h2 header
+------------
+
+### An h3 header ###
+
+*Italic*, **bold**, `monospace`.
+
+Lists look like:
+
+* this one
+* that one
+    1. first item
+    2. second item
+
+[External link](http://foo.bar), [internal link](local-doc.html).
+
+</div>
+
+<textarea class="code" data-gist="1286477">Loading code from Gist...</textarea>
+
+<iframe class="preview" data-gist="1286477"></iframe>
+
+<script src=./doc_engine.js></script>
+</body>
+</html>
