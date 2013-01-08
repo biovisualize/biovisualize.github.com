@@ -30,11 +30,21 @@
     var w = tileW * tilesData[0].length;
     var h = tileH * tilesData.length - 1;
 
-
     var view = d3.select('.viz')
         .append('svg')
         .attr('width', w)
         .attr('height', h - tileH);
+
+    var tiles = view.append('defs')
+            .selectAll('image')
+            .data(tileContent)
+            .enter().append('image')
+            .attr({
+                'xlink:href': function(d, i){return './img/' + d;},
+                id: function(d, i){return 'img' + i;},
+                width: tileW,
+                height: tileH
+            });
 
     var terrainGroup = view.append('g')
         .attr('class', 'terrain');
@@ -55,7 +65,7 @@
             .attr('height', truckH);
     var truckHit = truckGroup.append('image')
             .attr('class', 'truck-hit')
-            .attr('xlink:href', function(d, i){return './img/truck-hit.png';})
+            .attr('xlink:xlink:href', function(d, i){return './img/truck-hit.png';})
             .attr('y', h  - tileH - truckH - 10)
             .attr('width', truckW)
             .attr('height', truckH)
@@ -96,20 +106,33 @@
         tiles.enter().append('g')
             .attr('class', 'tiles');
         tiles.each(function(pD, pI){
-            var tile = d3.select(this).selectAll('image.tile')
-                .data(function(d, i){return d;});
-            tile.enter().append('image')
-                .attr('class', 'tile')
-                .attr('width', tileW)
-                .attr('height', tileH)
-            tile.attr('x', function(d, i){return i * tileW;})
-                .attr('y', function(d, i){return (pI - 1) * tileH;})
-                .attr('xlink:href', function(d, i){return './img/'+tileContent[d];})
-                .transition()
-                .duration(speed)
-                .ease('linear')
-                .attr('y', function(d, i){return pI * tileH;});
-            tile.exit().remove();
+            var tile = d3.select(this).selectAll('use.tile')
+                    .data(function(d, i){return d;});
+                tile.enter().append('use')
+                    .attr('class', 'tile');
+                tile.attr('x', function(d, i){return i * tileW;})
+                    .attr('y', function(d, i){return (pI - 1) * tileH;})
+                    .attr('xlink:href', function(d, i){return '#img' + d;})
+                    .transition()
+                    .duration(speed)
+                    .ease('linear')
+                    .attr('y', function(d, i){return pI * tileH;});
+                tile.exit().remove();
+
+//                var tile = d3.select(this).selectAll('image.tile')
+//                    .data(function(d, i){return d;});
+//                tile.enter().append('image')
+//                    .attr('class', 'tile')
+//                    .attr('width', tileW)
+//                    .attr('height', tileH);
+//                tile.attr('x', function(d, i){return i * tileW;})
+//                    .attr('y', function(d, i){return (pI - 1) * tileH;})
+//                    .attr('xlink:href', function(d, i){return './img/'+tileContent[d];})
+//                    .transition()
+//                    .duration(speed)
+//                    .ease('linear')
+//                    .attr('y', function(d, i){return pI * tileH;});
+//                tile.exit().remove();
             });
         tiles.exit().remove();
 
