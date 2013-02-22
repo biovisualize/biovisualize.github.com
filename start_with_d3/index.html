@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+    @import url(stack.css);
+
+    .caption {
+        color: black;
+        font-size: 96px;
+        text-align: center;
+        text-shadow: 0px 2px 6px rgba(0,0,0,.5);
+        margin-top: 0;
+        margin-bottom: 60px;
+    }
+
+    ul{
+        margin-top: 0;
+        list-style-type: none;
+    }
+
+    li li{
+        font-size: 40px
+    }
+
+    a{
+        background-image: url('arrow-right.png');
+        background-repeat: no-repeat;
+        padding-left: 32px;
+    }
+
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<body class="overview">
+
+<section>
+    <h1 class="caption">D3.js: Data-Driven Document</h1>
+    <a href="http://d3js.org/">D3.js Website</a><br />
+    <a href="http://vis.stanford.edu/files/2011-D3-InfoVis.pdf">D3 paper</a>
+    <img src="d3js.jpg" style="position:absolute; width:500px; top:300px; left: 500px" />
+</section>
+
+<section>
+    <h1 class="caption">Binding data to graphics</h1>
+    <p>Adding data to the DOM object</p>
+    <a href="http://www.springer.com/statistics/computational+statistics/book/978-0-387-24544-7">The Grammar of Graphics</a><br />
+    <a href="http://www.springer.com/statistics/computational+statistics/book/978-0-387-98140-6">Ggplot2</a>
+    <img src="gg.jpg" style="position:absolute; height: 400px; top:368px; left: 762px" />
+</section>
+
+<section>
+    <h1 class="caption">Prerequisite</h1>
+    <a href="https://developer.mozilla.org/en-US/docs/DOM">DOM</a><br />
+    <a href="https://developer.mozilla.org/en-US/docs/JavaScript">Javascript</a><br />
+    <a href="http://reference.sitepoint.com/css">CSS</a><br />
+    <a href="https://developer.mozilla.org/en-US/demos/tag/tech:svg">SVG</a><br />
+    <a href="http://diveintohtml5.info/">HTML5</a><br />
+    <a href="http://caniuse.com/">Other web technologies</a><br />
+    <a href="http://www.graphics.stanford.edu/courses/cs448b-04-winter/readings.html">Visualization</a>
+    <img src="caniuse.jpg" style="position:absolute; height: 500px; top:268px; left: 640px" />
+</section>
+
+<section>
+    <h1 class="caption">What it is not</h1>
+    <p>A shim (like in jQuery, Raphael)</p>
+    <p>A graphic library</p>
+        <ul>
+            <li><a href="http://nvd3.org/">NVD3</a></li>
+            <li><a href="http://tenxer.github.com/xcharts/">xChart</a></li>
+            <li><a href="https://github.com/michael/dance">Dance.js</a></li>
+            <li><a href="http://code.shutterstock.com/rickshaw/">Rickshaw</a></li>
+        </ul>
+    <p>Reusable components, <br />helper functions</p>
+    <img src="nvd3.jpg" style="position:absolute; height: 250px; top:500px; left: 550px" />
+</section>
+
+<section>
+    <h1 class="caption">Learn</h1>
+    <ul>
+        <li>Books
+            <ul>
+                <li><a href="http://oreilly.com/shop/product/0636920026938.html">Murray</a></li>
+                <li><a href="http://shop.oreilly.com/product/0636920025429.do">Dewar</a></li>
+            </ul>
+        </li>
+        <li>Tutorials
+            <ul>
+                <li><a href="http://enjalot.github.com/dot-append/">Video</a></li>
+                <li><a href="http://mbostock.github.com/d3/talk/20110921/#0">Slides</a></li>
+                <li><a href="https://github.com/mbostock/d3/wiki/Tutorials">Others</a></li>
+            </ul>
+        </li>
+        <li>Blogs
+            <ul>
+                <li><a href="http://bost.ocks.org/mike/">Mike Bostock</a></li>
+                <li><a href="http://vallandingham.me/vis/">Jim Vallandingham</a></li>
+                <li><a href="http://www.dashingd3js.com/">DashingD3Js</a></li>
+            </ul>
+        </li>
+    </ul>
+    <img src="murray_book.jpg" style="position:absolute; height: 500px; top:265px; left: 643px" />
+    <img id="buy" src="buy_now.png" style="position:absolute; height: 300px; top:150px; left: 450px; -webkit-transform: rotate(180deg)" />
+
+    <script>
+        var scrollIn4 = function(d){
+            console.log(5);
+            console.log(Math.floor(d*180) + "deg");
+            d3.select('#buy').style({"-webkit-transform": "rotate(" + (180 - Math.floor(d*180)) + "deg)"});
+        }
+    </script>
+
+</section>
+
+<section>
+    <h1 class="caption">Learn</h1>
+    <a href="https://github.com/mbostock/d3/wiki/API-Reference"> API on the Wiki</a><br />
+    <a href="https://github.com/mbostock/d3/wiki/Gallery">Example Gallery</a><br />
+    <a href="http://biovisualize.github.com/d3visualization/">Alternative Gallery</a><br />
+    <img src="alt_gallery.jpg" style="position:absolute; height: 400px; top:350px; left: 300px" />
+</section>
+
+<section>
+    <h1 class="caption">Contribute</h1>
+    <ul>
+        <li>Show your examples
+            <ul>
+                <li><a href="https://docs.google.com/spreadsheet/ccc?key=0AqMEGBUNwXeHdHpQNlVuY29SUE5BSXVtS3JueGlNYVE#gid=0">Alternative gallery spreadsheet</a></li>
+            </ul>
+        </li>
+        <li>Share Code:<br />
+            <ul>
+                <li><a href="https://gist.github.com/mbostock">Gist</a></li>
+                <li><a href="http://bl.ocks.org/mbostock">bl.ocks</a> (<a href="http://bl.ocks.org/mbostock">RSS</a>)</li>
+                <li><a href="http://tributary.io/">Tributary</a></li>
+                <li><a href="http://jsfiddle.net/christopheviau/zLxac/">JsFiddle</a></li>
+                <li><a href="http://plnkr.co/edit/9HVDge?p=preview">Plunker</a></li>
+            </ul>
+        </li>
+        <li>Submit
+            <ul>
+                <li><a href="https://github.com/mbostock/d3/issues">Bug report</a></li>
+                <li><a href="https://github.com/mbostock/d3/pulls">Pull Request</a></li>
+                <li><a href="https://github.com/d3/d3-plugins">Plugins</a></li>
+            </ul>
+        </li>
+    </ul>
+    <img src="tributary.jpg" style="position:absolute; height: 300px; top:468px; left: 580px" />
+</section>
+
+<section>
+    <h1 class="caption">Get help</h1>
+    <a href="https://groups.google.com/forum/?fromgroups#!forum/d3-js">Google Groups</a><br />
+    <a href="http://stackoverflow.com/questions/tagged/d3.js">StackOverflow</a><br />
+    <a href="http://webchat.freenode.net/">IRC: #d3js</a>
+    <img src="clipart.jpg" style="position:absolute; height: 500px; top:200px; left: 800px" />
+    <img src="pie_chart.jpg" style="position:absolute; height: 200px; top:200px; left: 400px" />
+</section>
+
+<section>
+    <h1 class="caption">Follow</h1>
+    <div id="twitter" style="-webkit-transform: rotate(180deg)"><a href="https://twitter.com/d3visualization" style="font-size: 120px; color:red;">@d3visualization</a></div><br /><br /><br />
+    <h1 class="final">Thanks!</h1>
+    <script>
+        var scrollOut7 = function(d){
+            var angle = Math.max(80-Math.floor(d*180), 0);
+//            console.log(angle, d, 64-Math.floor(d*180));
+            d3.select('#twitter').style({"-webkit-transform": "rotate(" + angle + "deg)"});
+        }
+    </script>
+</section>
+
+<script src="stack.v0.custom.js"></script>
+<script>
+    stack.on('scroll', function(d){
+        var func = window['scrollOut' + ~~d];
+        if(func) func.call(this, d - ~~d);
+        func = window['scrollIn' + (~~d + 1)]; //TODO: fwd/bkw
+        if(func) func.call(this, d - ~~d);
+    });
+</script>
