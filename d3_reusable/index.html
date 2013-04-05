@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    body {
+        font: 10px sans-serif;
+    }
+    .axis path, .axis line {
+        fill: none;
+        stroke: black;
+        shape-rendering: crispEdges;
+    }
+    .axis path{
+        fill: none;
+        stroke: none;
+    }
+    .bar {
+        fill: steelblue;
+    }
+
+</style>
+</head>
+<script src="./d3.v3.js"></script>
+<script src="./reusable_chart.js"></script>
+<body ng-app>
+
+<form >
+    <input id="gap" type="range" onChange="updateChartOption('gap', this.value)" min="0" max="90" value="0">
+    <label for="gap">Gap %</label>
+    <br />
+    <input id="height" type="range" onChange="updateChartOption('height', this.value)" min="50" max="400" value="300">
+    <label for="height">Height</label>
+    <br />
+    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="bounce">Bounce</button><br />
+    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="back">Back</button><br />
+    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="cubic-in-out">cubic-in-out</button>
+</form>
+<div id="message">&nbsp</div>
+
+<div class="chart"></div>
+
+<script>
+
+    var chart = d3.custom.barChart();
+    chart.width(500).height(400)
+        .on('customHover', function(d, i){ d3.select('#message').text(d); })
+
+    function randomDataset(){
+        return d3.range(~~(Math.random()*50)+1).map(function(d, i){return ~~(Math.random()*1000);});
+    }
+
+    function updateChartOption(opt, value){
+        chart[opt].call(this, value)
+        d3.select('.chart').call(chart);
+    }
+
+    function updateChartData(){
+        d3.select('.chart')
+            .datum(randomDataset())
+            .call(chart);
+    }
+
+    updateChartData();
+
+</script>
+</body>
+</html>
