@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <style>
     body {
-        font: 10px sans-serif;
+        font: 14px sans-serif;
     }
     .axis path, .axis line {
         fill: none;
@@ -22,46 +22,94 @@
 </style>
 </head>
 <script src="./d3.v3.js"></script>
+<script src="./angular.js"></script>
 <script src="./reusable_chart.js"></script>
-<body ng-app>
+<body>
 
-<form >
-    <input id="gap" type="range" onChange="updateChartOption('gap', this.value)" min="0" max="90" value="0">
-    <label for="gap">Gap %</label>
-    <br />
-    <input id="height" type="range" onChange="updateChartOption('height', this.value)" min="50" max="400" value="300">
-    <label for="height">Height</label>
-    <br />
-    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="bounce">Bounce</button><br />
-    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="back">Back</button><br />
-    <button type="button" onClick="updateChartOption('ease', this.value); updateChartData('data')" value="cubic-in-out">cubic-in-out</button>
-</form>
-<div id="message">&nbsp</div>
 
-<div class="chart"></div>
+<div ng-app="charts">
+    <bar-chart></bar-chart>
+    <chart-form></chart-form>
+    <chart-info></chart-info>
+</div>
+
 
 <script>
 
-    var chart = d3.custom.barChart();
-    chart.width(500).height(400)
-        .on('customHover', function(d, i){ d3.select('#message').text(d); })
+    angular.module('charts', [])
+        .directive('barChart', function(){
+            var chart = d3.custom.barChart();
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    options: '=options',
+                    value: '=value',
+                    data: '=data'
+                },
+                template: '<div class="chart" options="options" value="value" data="data"></div>',
+                controller: function AppCtrl ($scope) {
+                    $scope.options = {gap: 0, width: 500, height: 300};
+                    $scope.value = 0;
+                    $scope.data = [1, 2, 3, 4];
+                },
+                link: function(scope, element, attrs) {
 
-    function randomDataset(){
-        return d3.range(~~(Math.random()*50)+1).map(function(d, i){return ~~(Math.random()*1000);});
-    }
+                    var chartEl = d3.select(element[0]);
+                    chart.on('customHover', function(d, i){
+                        scope.value = d;
+                        scope.$apply();
+                    });
 
-    function updateChartOption(opt, value){
-        chart[opt].call(this, value)
-        d3.select('.chart').call(chart);
-    }
+                    scope.$watch('data', function (newVal, oldVal) {
+                        chartEl.datum(newVal).call(chart);
+                    });
 
-    function updateChartData(){
-        d3.select('.chart')
-            .datum(randomDataset())
-            .call(chart);
-    }
+                    scope.$watch('options', function (newVal, oldVal) {
+                        injectOptions(newVal)
+                        chartEl.call(chart);
+                    }, true);
 
-    updateChartData();
+                    function injectOptions(_options){
+                        d3.entries(_options).forEach(function(d, i){
+                            chart[d.key].call(this, d.value);
+                        });
+                    }
+                }
+            }
+        })
+        .directive('chartForm', function(){
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    options:'=options',
+                    data: '=data'
+                },
+                controller: function AppCtrl ($scope) {
+                    $scope.update = function(d, i){ $scope.data = randomData(); };
+                    function randomData(){
+                        return d3.range(~~(Math.random()*50)+1).map(function(d, i){return ~~(Math.random()*1000);});
+                    }
+                },
+                template: '<div options="options" data="data">' +
+                    '<input type="range" data-ng-model="options.gap" value="0" min="0" max="100"/>{{options.gap}}<br />' +
+                    '<button ng-click="update()">Update Data</button></div>'
+            }
+            })
+            .directive('chartInfo', function(){
+                return {
+                    restrict: 'E',
+                    replace: true,
+                    scope: {
+                        options:'=options',
+                        value: '=value'
+                    },
+                    template: '<div value="value" options="options"><br />' +
+                        '<div><b>Hovered Bar Value: </b>{{value}}</div>' +
+                        '<b>Options:</b><br /><div ng-repeat="(key, value) in options">{{key}}={{value}}<br />'
+                }
+            });
 
 </script>
 </body>

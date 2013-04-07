@@ -5,7 +5,7 @@ d3.custom.barChart = function module() {
         width = 500,
         height = 500,
         gap = 0,
-        ease = 'back';
+        ease = 'bounce';
     var svg;
 
     var dispatch = d3.dispatch('customHover');
