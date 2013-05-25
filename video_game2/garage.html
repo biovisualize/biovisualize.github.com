@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+  <script type='text/javascript' src="../lib/d3.js"></script>
+    <style type='text/css'>
+        .cell{
+            stroke: none;
+        }
+    </style>
+</head>
+<body>
+
+<div id="grid"></div>
+
+<script type="text/javascript">
+
+var w = 1200;
+var h = 500;
+
+var svg = d3.select('body')
+    .append('svg')
+    .attr({width: w,
+        height: h,
+        version: '1.1',
+        xmlns: 'http://www.w3.org/2000/svg'
+        // 'xmlns:xlink': 'http://www.w3.org/1999/xlink'
+    });
+
+svg.append('image')
+    .classed('bmw', true)
+    .attr({
+        'xlink:href': 'bmw.png',
+        x: 600,
+        y: 0,
+        height: '140px',
+        width: '500px'
+    });
+
+d3.xml('mustang.svg', 'image/svg+xml', function(xml) {  
+  var importedNode = document.importNode(xml.documentElement, true);
+  svg.append('g')
+    .classed('mustang', true)
+    .attr('transform', function(d, i){ 
+        return 'translate(' + 600 + ',0) scale('+ 0.5 +')';
+    })
+    .each(function(d, i){ 
+        var plane = this.appendChild(importedNode.cloneNode(true)); 
+        d3.select(plane).select('path').attr('fill', 'blue');
+    });
+});
+
+d3.select('body').on('click', function(d, i){ 
+    d3.select('.mustang')
+        .attr('transform', function(d, i){ 
+            return 'translate(' + 600 + ',0) scale('+ 0.5 +')';
+        })
+        .transition()
+        .duration(1000)
+        .attr('transform', function(d, i){ 
+            return 'translate(' + 0 + ',0) scale('+ 0.5 +')';
+        }); 
+    d3.select('.bmw')
+        .attr({x: 600})
+        .transition()
+        .duration(2000)
+        .attr({x: 0});
+})
+
+</script>
+
+</body>
+</html>
